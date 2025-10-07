@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discretisation and Quantisation Demo</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Discretisation (Sampling) and Quantisation</h1>
+
+    <div class="controls">
+      <div class="control">
+        <label for="freq">Signal Frequency <span id="freqVal">440</span> Hz</label>
+        <input id="freq" type="range" min="50" max="2000" step="1" value="440">
+      </div>
+      <div class="control">
+        <label for="fs">Sampling Rate <span id="fsVal">8000</span> Hz</label>
+        <input id="fs" type="range" min="500" max="48000" step="100" value="8000">
+      </div>
+      <div class="control">
+        <label for="bits">Bit Depth <span id="bitsVal">4</span> bits</label>
+        <input id="bits" type="range" min="1" max="16" step="1" value="4">
+      </div>
+      <div class="control">
+        <label for="window">Time Window <span id="windowVal">20</span> ms</label>
+        <input id="window" type="range" min="5" max="200" step="5" value="20">
+      </div>
+    </div>
+
+    <div class="actions">
+      <button id="playOriginal">Play Original</button>
+      <button id="playProcessed">Play Sampled + Quantised</button>
+      <label class="inline">
+        <input id="zoh" type="checkbox" checked>
+        Zero-Order Hold (staircase) reconstruction
+      </label>
+    </div>
+
+    <div class="canvases">
+      <div class="canvas-block">
+        <div class="canvas-title">Original (high-res) signal</div>
+        <canvas id="canvasOriginal" width="900" height="220"></canvas>
+      </div>
+      <div class="canvas-block">
+        <div class="canvas-title">Sampled points and quantised reconstruction</div>
+        <canvas id="canvasProcessed" width="900" height="220"></canvas>
+      </div>
+    </div>
+
+    <div class="controls" style="margin-top: 24px;">
+      <h2 style="grid-column: 1 / -1; margin: 0 0 4px;">Image Sampling and Quantisation</h2>
+      <div class="control" style="grid-column: 1 / -1;">
+        <label for="imgFile">Upload image (PNG/JPG)</label>
+        <input id="imgFile" type="file" accept="image/*">
+      </div>
+      <div class="control">
+        <label for="pixelSize">Pixel Size (sampling) <span id="pixelSizeVal">8</span> px</label>
+        <input id="pixelSize" type="range" min="1" max="32" step="1" value="8">
+      </div>
+      <div class="control">
+        <label for="imgBits">Bit Depth per channel <span id="imgBitsVal">4</span> bits</label>
+        <input id="imgBits" type="range" min="1" max="8" step="1" value="4">
+      </div>
+      <div class="control">
+        <label class="inline"><input id="toGray" type="checkbox"> Convert to grayscale</label>
+        <div style="color:#a7acc0; font-size: 13px; margin-top: 6px;">Grayscale makes quantisation artifacts easier to see.</div>
+      </div>
+      <div class="actions" style="grid-column: 1 / -1;">
+        <button id="useSample">Use built-in sample image</button>
+        <button id="resetView">Fit to view</button>
+      </div>
+    </div>
+
+    <div class="canvases">
+      <div class="canvas-block">
+        <div class="canvas-title">Original image</div>
+        <canvas id="imgOriginal" width="900" height="360"></canvas>
+      </div>
+      <div class="canvas-block">
+        <div class="canvas-title">Sampled (pixelated) and quantised image</div>
+        <canvas id="imgProcessed" width="900" height="360"></canvas>
+      </div>
+    </div>
+
+    <details class="explain">
+      <summary>How the image demo works</summary>
+      <ul>
+        <li><strong>Sampling (spatial)</strong>: increase <em>Pixel Size</em> to sample fewer points across the image, producing blocky pixels.</li>
+        <li><strong>Quantisation (amplitude)</strong>: lower <em>Bit Depth</em> to reduce the number of intensity/color levels, creating banding/posterisation.</li>
+      </ul>
+    </details>
+
+    <details class="explain">
+      <summary>What are discretisation and quantisation?</summary>
+      <ul>
+        <li><strong>Discretisation (Sampling)</strong>: measuring a continuous-time signal at discrete time intervals set by the sampling rate \( f_s \). Too low a rate causes aliasing when frequency content above \( f_s/2 \) folds down.</li>
+        <li><strong>Quantisation</strong>: rounding continuous amplitude to discrete levels set by the bit depth. Fewer bits increase rounding error, heard as noise or distortion.</li>
+      </ul>
+      <p>Use the controls to see how sampling rate and bit depth change the dots (sampled values), the staircase (zero-order hold), and to hear the effect.</p>
+    </details>
+
+    <footer>
+      <span>Tip: Nyquist criterion requires sampling rate ≥ 2× highest signal frequency.</span>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+  
+</body>
+</html>
+
+
